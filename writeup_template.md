@@ -1,11 +1,3 @@
-#**Behavioral Cloning** 
-
-##Writeup Template
-
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Behavioral Cloning Project**
 
 The goals / steps of this project are the following:
@@ -15,91 +7,174 @@ The goals / steps of this project are the following:
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
 
+# Rubric Points
+Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
-[//]: # (Image References)
+## Required Files
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
-
-## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
-
----
-###Files Submitted & Code Quality
-
-####1. Submission includes all required files and can be used to run the simulator in autonomous mode
-
+### Submission includes all required files and can be used to run the simulator in autonomous mode
 My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md or writeup_report.pdf summarizing the results
 
-####2. Submission includes functional code
+## Quality of Code
+
+### Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
 python drive.py model.h5
 ```
 
-####3. Submission code is usable and readable
-
+### Submission code is usable and readable
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
-###Model Architecture and Training Strategy
 
-####1. An appropriate model architecture has been employed
+## Model Architecture and Training Strategy
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+### An appropriate model architecture has been employed
+My model consists of a convolution neural network with varying filter sizes and depths between 24 and 64 (model.ipynb third cell) 
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+The model includes RELU layers to introduce nonlinearity , and the data is normalized in the model using a Keras lambda layer. 
 
-####2. Attempts to reduce overfitting in the model
+### Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains dropout layers in order to reduce overfitting.  
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained in a large dataset with around 100000 pictures to further insure that it would not overfit. The brightness was always slightly changed on each picture to get more variation.
 
-####3. Model parameter tuning
+The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+### Model parameter tuning
 
-####4. Appropriate training data
+The model used an adam optimizer, so the learning rate was not tuned manually.
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+### Appropriate training data
 
-For details about how I created the training data, see the next section. 
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and driving the track in the opposite direction.
 
-###Model Architecture and Training Strategy
+## Architecture and Training Documentation
 
-####1. Solution Design Approach
+### Solution Design Approach
+The overall strategy for deriving a model architecture was to roughly follow the Nvidia model and follow a try and error approach. I used this approach because it was recommended in the udacity class.
 
-The overall strategy for deriving a model architecture was to ...
+In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a satisfying accuracy of about 98%, but on the road it failed on the first curve.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+The first approach to imrpove the behaviour was to create more training data and train it for more epochs. Even the accuracy would get higher than 99%, the driving behavior was not satisfying.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
-
-To combat the overfitting, I modified the model so that ...
-
-Then I ... 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+The step were it started working was when I added Relu activation functions to the dense layers and changed the strides of the convolutional layers in a way that the last convolutional layer has a output shape of (none, 6 ,5 ,64) instead of (none, 2, 9, 64). It is not clear to me which of the two brought the success.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
-####2. Final Model Architecture
+### Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
-
+<table>
+ <tr>
+  <td>Input</td>
+  <td>shape: 160x320x3 </td>
+ </tr>
+ <tr>
+  <td>Lambda</td>
+  <td>Shape: Normalize range -0.5<=>0.5 </td>
+ </tr>
+ <tr>
+  <td>Cropping</td>
+  <td>output: 90x320x3 </td>
+ </tr>
+ <tr>
+  <td >Convolution 5x5</td>
+  <td>Stride:2x3, padding:'VALID', output:43x106x24 </td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Dropout</td>
+  <td>keep:60%</td>
+ </tr>
+ <tr>
+  <td> Convolution 5x5</td>
+  <td>Stride:1x2, padding:'VALID', output:39x51x36 </td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Dropout</td>
+  <td>keep:70%</td>
+ </tr>
+ <tr>
+  <td>Convolution 4x4</td>
+  <td>Stride:2x3, padding:'VALID', output:18x16x48 </td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Dropout</td>
+  <td>keep:70%</td>
+ </tr>
+ <tr>
+  <td>Convolution 3x3</td>
+  <td>Stride:2x2, padding:'VALID', output:8x7x48 </td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Convolution 3x3</td>
+  <td>Stride:1x1, padding:'VALID', output:6x5x64 </td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Flatten</td>
+  <td>output:1920</td>
+ </tr>
+ <tr>
+  <td>Fully Connected</td>
+  <td>output:1000</td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Fully Connected</td>
+  <td>output:100</td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Fully Connected</td>
+  <td>output:50</td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Fully Connected</td>
+  <td>output:10</td>
+ </tr>
+ <tr>
+  <td>RELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Fully Connected</td>
+  <td>output:1</td>
+ </tr>
+</table>
 ####3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
