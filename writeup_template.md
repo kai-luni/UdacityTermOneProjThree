@@ -185,26 +185,23 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
+<img src="screenshots/CenterGoingStraight.png" width="480"/>
+<br>
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+I then recorded the vehicle recovering from the left side and right sides of the road by driving several rounds going from the right side to the left side, here is a picture on the right side of the road just about to go sharply left.
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+<img src="screenshots/RecoverSteeringLeft.png" width="480"/>
+<br>
 
-Then I repeated this process on track two in order to get more data points.
+To augment the data sat, I also flipped images and angles thinking that this would equal out the tendency of the neural network to steer more in one direction than in the other. For example, here is an image that has then been flipped:
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+<img src="screenshots/Flipped.png" width="480"/>
+<br>
 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+After the collection process, I had 19738 data points. I then preprocessed this data by cropping some of the top and the bottom as it seems to be unnecessary for the task at hand.
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+I finally randomly shuffled the data set and put 10% of the data into a validation set. 
+
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I trained the network for 10 epochs which gave me a very good accuracy of 1.6%. I used an adam optimizer so that manually training the learning rate wasn't necessary.
