@@ -1,4 +1,4 @@
-**Behavioral Cloning Project**
+# Behavioral Cloning Project
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
@@ -7,7 +7,7 @@ The goals / steps of this project are the following:
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
 
-# Rubric Points
+## Rubric Points
 Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ## Required Files
@@ -34,15 +34,17 @@ The model.py file contains the code for training and saving the convolution neur
 ## Model Architecture and Training Strategy
 
 ### An appropriate model architecture has been employed
-My model consists of a convolution neural network with varying filter sizes and depths between 24 and 64 (model.ipynb third cell) 
+My model consists of a convolution neural network with varying filter sizes and depths between 24 and 80. (model.ipynb third cell) 
 
-The model includes RELU layers to introduce nonlinearity , and the data is normalized in the model using a Keras lambda layer. 
+The model includes RELU layers to introduce nonlinearity , and the data is normalized to values between -0.5 and 0.5 in the model using a Keras lambda layer. 
 
 ### Attempts to reduce overfitting in the model
 
 The model contains dropout layers in order to reduce overfitting.  
 
 The model was trained in a large dataset with around 100000 pictures to further insure that it would not overfit. The brightness was always slightly changed on each picture to get more variation.
+
+A Gaussian Noise layer from Keras was included into the model to generalize the model even more.
 
 The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
@@ -52,18 +54,18 @@ The model used an adam optimizer, so the learning rate was not tuned manually.
 
 ### Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and driving the track in the opposite direction.
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and driving the track in the opposite direction. Further on every picture was mirrored and the steering angles inverterted so that an possible uneven distribution between left and right steering is equaled out.
 
 ## Architecture and Training Documentation
 
 ### Solution Design Approach
-The overall strategy for deriving a model architecture was to roughly follow the Nvidia model and follow a try and error approach. I used this approach because it was recommended in the udacity class.
+The overall strategy for deriving a model architecture was to roughly follow the Nvidia model and follow a try and error approach.
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a satisfying accuracy of about 98%, but on the road it failed on the first curve.
 
-The first approach to imrpove the behaviour was to create more training data and train it for more epochs. Even the accuracy would get higher than 99%, the driving behavior was not satisfying.
+The first approach to improve the behaviour was to create more training data and train it for more epochs. Even the accuracy would get higher than 99%, the driving behavior was not satisfying.
 
-The step were it started working was when I added Relu activation functions to the dense layers and changed the strides of the convolutional layers in a way that the last convolutional layer has a output shape of (none, 6 ,5 ,64) instead of (none, 2, 9, 64). It is not clear to me which of the two brought the success.
+The step where it started working was when I added Relu activation functions to the dense layers and changed the strides of the convolutional layers in a way that the last convolutional layer has a output shape of (none, 6 ,5 ,80) instead of (none, 2, 9, 80). It is not clear to me which of the two brought the success.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
@@ -81,6 +83,10 @@ At the end of the process, the vehicle is able to drive autonomously around the 
  <tr>
   <td>Cropping</td>
   <td>output: 90x320x3 </td>
+ </tr>
+ <tr>
+  <td>Gaussian Noise</td>
+  <td>standard deviation: 0.3</td>
  </tr>
  <tr>
   <td >Convolution 5x5</td>
@@ -120,7 +126,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
  </tr>
  <tr>
   <td>Convolution 3x3</td>
-  <td>Stride:2x2, padding:'VALID', output:8x7x48 </td>
+  <td>Stride:2x2, padding:'VALID', output:8x7x64 </td>
  </tr>
  <tr>
   <td>RELU</td>
@@ -128,7 +134,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
  </tr>
  <tr>
   <td>Convolution 3x3</td>
-  <td>Stride:1x1, padding:'VALID', output:6x5x64 </td>
+  <td>Stride:1x1, padding:'VALID', output:6x5x80 </td>
  </tr>
  <tr>
   <td>RELU</td>
@@ -175,30 +181,27 @@ At the end of the process, the vehicle is able to drive autonomously around the 
   <td>output:1</td>
  </tr>
 </table>
-####3. Creation of the Training Set & Training Process
+### Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
+<img src="screenshots/CenterGoingStraight.png" width="480"/>
+<br>
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+I then recorded the vehicle recovering from the left side and right sides of the road by driving several rounds going from the right side to the left side, here is a picture on the right side of the road just about to go sharply left.
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+<img src="screenshots/RecoverSteeringLeft.png" width="480"/>
+<br>
 
-Then I repeated this process on track two in order to get more data points.
+To augment the data sat, I also flipped images and angles thinking that this would equal out the tendency of the neural network to steer more in one direction than in the other. For example, here is an image that has then been flipped:
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+<img src="screenshots/Flipped.png" width="480"/>
+<br>
 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+After the collection process, I had 19738 data points. I then preprocessed this data by cropping some of the top and the bottom as it seems to be unnecessary for the task at hand.
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+I finally randomly shuffled the data set and put 10% of the data into a validation set. 
+
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I trained the network for 10 epochs which gave me a very good accuracy of 1.6%. I used an adam optimizer so that manually training the learning rate wasn't necessary.
