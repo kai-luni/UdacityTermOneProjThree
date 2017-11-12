@@ -17,7 +17,7 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
+* writeup_report.md summarizing the results
 
 ## Quality of Code
 
@@ -128,7 +128,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
  </tr>
  <tr>
   <td>Flatten</td>
-  <td>output:384</td>
+  <td>output:2048</td>
  </tr>
  <tr>
   <td>ELU</td>
@@ -186,4 +186,4 @@ After the collection process, I had 20,416 data points. I then preprocessed this
 
 I finally randomly shuffled the data set and put 10% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I trained the network for 3 epochs which gave me a very good accuracy of 3.9%. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I trained the network for 2 epochs which gave me an accuracy of around 5% which is good enough for the task at hand. I used an adam optimizer so that manually training the learning rate wasn't necessary.
