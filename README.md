@@ -1,2 +1,0 @@
-# UdacityTermOneProjThree
-Behaviorial Cloning Project
