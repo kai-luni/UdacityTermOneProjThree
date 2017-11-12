@@ -61,9 +61,9 @@ The overall strategy for deriving a model architecture was to roughly follow the
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a satisfying accuracy of about 98%, but on the road it failed on the first curve. I also noticed that a high accuracy did not mean much in this case. It was easy to reach an accuracy of up to 99% and the car would go off into the wild in the first curve. In other cases an accuracy of 95% was enough to drive half a round.
 
-The first approach to improve the behaviour was to create more training data and train it for more epochs. The car was not staying much more on the road.
+The first approach to improve the behaviour was to create more training data and train it for more epochs. The car was not staying much longer on the road.
 
-After increasing the depth of the model and the amount of samples. I came to realize that a smaller model with less epoch was enough to succeed the given task. Next to that I tried to equal the amount of steering angles more out by removing two thirds of the zero angle pictures and increasing the amount of right angle and let angle pictures by copying.
+After increasing the depth of the model and the amount of samples. I came to realize that a smaller model with less epochs was enough to succeed the given task. Next to that I tried to balance the amount of steering angles more out by removing two thirds of the zero angle pictures and increase the amount of right angle and let angle pictures by copying.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
@@ -84,7 +84,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
  </tr>
  <tr>
   <td >Convolution 5x5</td>
-  <td>Stride:3x3, padding:'VALID', output:29x79x24 </td>
+  <td>Stride:2x2, padding:'VALID', output:43x158x24 </td>
  </tr>
  <tr>
   <td>ELU</td>
@@ -92,23 +92,31 @@ At the end of the process, the vehicle is able to drive autonomously around the 
  </tr>
  <tr>
   <td> Convolution 5x5</td>
-  <td>Stride:3x3, padding:'SAME', output:10x27x32 </td>
+  <td>Stride:2x2, padding:'SAME', output:20x77x32 </td>
  </tr>
  <tr>
   <td>ELU</td>
   <td></td>
  </tr>
  <tr>
-  <td>Convolution 4x4</td>
-  <td>Stride:2x4, padding:'VALID', output:4x6x48 </td>
+  <td>Convolution 5x5</td>
+  <td>Stride:3x3, padding:'VALID', output:8x37x48 </td>
  </tr>
  <tr>
   <td>ELU</td>
   <td></td>
  </tr>
  <tr>
-  <td>Convolution 3x5</td>
-  <td>Stride:1x1, padding:'VALID', output:2x2x64 </td>
+  <td>Convolution 3x3</td>
+  <td>Stride:1x2, padding:'VALID', output:6x18x64 </td>
+ </tr>
+ <tr>
+  <td>ELU</td>
+  <td></td>
+ </tr>
+ <tr>
+  <td>Convolution 3x3</td>
+  <td>Stride:1x2, padding:'VALID', output:4x8x64 </td>
  </tr>
  <tr>
   <td>ELU</td>
@@ -173,9 +181,9 @@ To augment the data sat, I also flipped images and angles thinking that this wou
 <br>
 
 
-After the collection process, I had 20416 data points. I then preprocessed this data by cropping some of the top and the bottom as it seems to be unnecessary for the task at hand.
+After the collection process, I had 20,416 data points. I then preprocessed this data by cropping some of the top and the bottom as it seems to be unnecessary for the task at hand.
 
 
 I finally randomly shuffled the data set and put 10% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I trained the network for 3 epochs which gave me a very good accuracy of 1.6%. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I trained the network for 3 epochs which gave me a very good accuracy of 3.9%. I used an adam optimizer so that manually training the learning rate wasn't necessary.
