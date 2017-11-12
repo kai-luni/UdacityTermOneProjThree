@@ -65,6 +65,8 @@ The first approach to improve the behaviour was to create more training data and
 
 After increasing the depth of the model and the amount of samples. I came to realize that a smaller model with less epochs was enough to succeed the given task. Next to that I tried to balance the amount of steering angles more out by removing two thirds of the zero angle pictures and increase the amount of right angle and let angle pictures by copying.
 
+The final breakthrough came with the strides as low as one or two in all convolutional layers. I think this made it easier for the convolutional network to see every aspect of the picture at hand.
+
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 ### Final Model Architecture
